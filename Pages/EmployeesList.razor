@@ -1,0 +1,68 @@
+﻿@page "/EmployeesList"
+@using EmployeeBlazorCRUD.Data
+@using EmployeeBlazorCRUD.Models
+@inject EmployeeService employeesservice
+
+
+<a class="btn btn-primary mb-3" href="AddEmployee">Add New Employee</a>
+
+<h1>Employees List</h1>
+
+@if (EmpObj is null)
+{
+    <p><em>Loading.................</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Emp No
+                </th>
+
+                <th>
+                    FirstName
+                </th>
+
+                <th>
+                    MiddleName
+                </th>
+
+                <th>
+                    LastName
+                </th>
+                <th>
+                    Disignation
+                </th>
+              <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in EmpObj)
+            {
+            <tr>
+                <td>@emp.Id</td>
+                <td>@emp.FirstName</td>
+                <td>@emp.MiddleName</td>
+                <td>@emp.LastName</td>
+                <td>@emp.Designation</td>
+                <td>
+                        <a class="btn btn-warning" href="EditEmployee/@emp.Id">Edit</a>
+                        <a class="btn btn-danger" href="Delete/@emp.Id">Delete</a>                        
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code{
+    List<Employee> EmpObj;
+
+    protected override async Task OnInitializedAsync()
+    {
+        EmpObj = await Task.Run(() => employeesservice.GetAllEmployees());
+    }
+}
